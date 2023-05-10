@@ -1,34 +1,60 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
 import './App.css'
+import contacts from "./contacts.json"
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [firstFive, setFirstFive] = useState(contacts.slice(0, 5));
 
-  return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
-  )
-}
+function addRandom() {
+  let afterFive = contacts.filter(oneContact => {
+    return !firstFive.includes(oneContact)
+  })
+  
+const randomCeleb = Math.floor(Math.random() * afterFive.length)
+const newCeleb = afterFive[randomCeleb]
+const addedCeleb = [...firstFive,newCeleb]
+  console.log(newCeleb)
+  setFirstFive(addedCeleb)
+  }
+};
 
-export default App
+function sortByPopularity() {
+  const popularceleb = [...firstFive].sort((a, b) => b.popularity - a.popularity)
+  setFirstFive(popularceleb)
+};
+
+function sortByName() {
+  const aplhaceleb = [...firstFive].sort((a, b) => a.name.localeCompare(b.name))
+  setFirstFive(aplhaceleb)
+};
+
+function deleteContact(id) {
+  const deleteceleb = [...firstFive].filter((contact) => contact.id !== id)
+  setFirstFive(deleteceleb)
+};
+
+/* return ( 
+  <div className='App'>
+    <h1>Iron Contacts</h1>
+    <button onClick={() => addRandom()}>Add Random Contact</button>
+    <table>
+      <h1 className='title'>Iron Contacts</h1>
+      <h1 className='title2'>🌕🌖🌗🌘🌑🌒🌓🌔</h1>
+      <button className='buttons' onClick={() => addRandom()}>Add Random Contact</button>
+      <button className='buttons' onClick={() => sortByPopularity()}>Sort by popularity</button>
+      <button className='buttons' onClick={() => sortByName()}>Sort by name</button>
+      <tbody>
+        {firstFive.map((firstFive,index) => (
+          <tr key={index}>
+            <td className='table2'><img className='celebimage' src={firstFive.pictureUrl} alt={firstFive.name}/></td>
+            <td className='table2'>{firstFive.name}</td>
+            <td className='table2'>{firstFive.popularity.toFixed(2)}</td>
+            <td className='table2'>{firstFive.wonEmmy ? '🏆' : "💩"}</td>
+            <td className='table2'>{firstFive.wonOscar ? '🏆' : "💩"}</td>
+            <td className='table2'><button className='deletebtn' onClick={() => deleteContact(firstFive.id)}>Delete</button></td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+);  */
